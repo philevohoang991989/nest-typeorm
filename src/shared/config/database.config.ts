@@ -16,7 +16,7 @@ const dbConfig = {
   migrationsTableName: 'migrations',
   migrations: ['dist/**/migration/*.js'],
   migrationsRun: process.env.DB_MIGRATION_RUN === 'true',
-  synchronize: false,
+  synchronize: true,
   logging: process.env.DB_LOGGING === 'true',
 };
 
