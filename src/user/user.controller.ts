@@ -9,19 +9,26 @@ import {
   Inject,
   Logger,
   Query,
+  UseGuards,
+  ClassSerializerInterceptor,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { NormalizeFilterPipe } from './pipes/normalize-filter.pipe';
 import { FilterUserDTO } from './dto/user-filter.dto';
 import { FindQueryDto } from 'src/shared/dto/find-query.dto';
 import { NormalizeFindQueryPipe } from 'src/shared/pipes/normalize-find-query.pipe';
+import { JwtAuthGuard } from 'src/auth/guard/jwt.guard';
 
 @ApiTags('Users')
 @Controller('user')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 export class UserController {
   constructor(
     private readonly userService: UserService,
