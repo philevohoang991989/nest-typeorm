@@ -13,7 +13,4 @@ export class UsersController {
   async create(@Body() createUserDTO: CreateUserDTO): Promise<ResponseDTO> {
     return this.usersService.register(createUserDTO);
   }
-
-
-
 }

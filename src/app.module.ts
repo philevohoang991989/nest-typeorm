@@ -20,7 +20,7 @@ import { SharedModule } from './shared/shared.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [databaseConfig]
+      load: [databaseConfig],
     }),
     WinstonModule.forRootAsync({
       inject: [ConfigService],
@@ -55,10 +55,11 @@ import { SharedModule } from './shared/shared.module';
     MailModule,
     SharedModule,
     AuthModule,
-    UsersModule
+    UsersModule,
   ],
   controllers: [AppController],
-  providers: [AppService,
+  providers: [
+    AppService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
