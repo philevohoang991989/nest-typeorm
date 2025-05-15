@@ -15,6 +15,8 @@ import { MailModule } from './mail/mail.module';
 import { UsersModule } from './modules/users/users.module';
 import databaseConfig from './shared/config/database.config';
 import { SharedModule } from './shared/shared.module';
+import { CategoryModule } from './modules/category/category.module';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
   imports: [
@@ -56,6 +58,8 @@ import { SharedModule } from './shared/shared.module';
     SharedModule,
     AuthModule,
     UsersModule,
+    CategoryModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [
