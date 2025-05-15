@@ -1,4 +1,4 @@
-import { BaseEntity } from "@/shared/entity/base.entity";
+import { BaseEntity } from '@/shared/entity/base.entity';
 import {
   Column,
   Entity,
@@ -42,7 +42,7 @@ export class User extends BaseEntity {
 
   @Column({
     name: 'avatar',
-    default: ''
+    default: '',
   })
   avatar: string;
 
@@ -96,6 +96,5 @@ export class User extends BaseEntity {
     type: 'timestamptz',
     nullable: true,
   })
-  blockAt: Date;
-
+  blockAt: Date | undefined | null;
 }

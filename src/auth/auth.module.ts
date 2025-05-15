@@ -16,16 +16,17 @@ import { LocalStrategy } from './passport/local.strategy';
   imports: [
     TypeOrmModule.forFeature([User]),
     JwtModule.registerAsync({
-      useFactory: async (configService: ConfigService) => ({
+      // eslint-disable-next-line @typescript-eslint/require-await
+      useFactory: async () => ({
         global: true,
         secret: envConfig.JWT_SECRET,
         signOptions: { expiresIn: envConfig.JWT_EXPIRES_IN },
       }),
-      inject: [ConfigService]
+      inject: [ConfigService],
     }),
     PassportModule,
     UsersModule,
-    MailModule
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, JwtStrategy],
