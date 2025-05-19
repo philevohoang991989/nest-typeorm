@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { Public } from '@/decorator/public.decorator';
 import { Body, Controller, Delete, Get, Param, Patch, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { ApiTags } from '@nestjs/swagger';
@@ -14,6 +14,7 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
   @Post()
+  @Public()
   @UseInterceptors(
     FileFieldsInterceptor(
       [
@@ -24,7 +25,7 @@ export class ProductsController {
           destination: './uploads/products', // thư mục lưu ảnh
           filename: (req, file, cb) => {
             const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
             cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
           },
         }),

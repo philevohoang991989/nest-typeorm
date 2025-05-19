@@ -1,16 +1,16 @@
-import { Entity } from 'typeorm';
-import { PrimaryGeneratedColumn, ManyToOne, Column, CreateDateColumn } from 'typeorm';
 import { User } from '@/modules/users/entities/user.entity';
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { OrderItem } from './order-item.entity';
 
 @Entity({ name: 'order' })
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, user => user.orders)
+  @ManyToOne(() => User, (user) => user.orders)
   user: User;
 
-  @OneToMany(() => OrderItem, item => item.order, { cascade: true })
+  @OneToMany(() => OrderItem, (item) => item.order, { cascade: true })
   items: OrderItem[];
 
   @Column()

@@ -1,4 +1,5 @@
 import { Category } from '@/modules/category/entities/category.entity';
+import { OrderItem } from '@/modules/order/entities/order-item.entity';
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ProductAttributeValue } from './product-attribute-value.entity';
 import { ProductImage } from './product-image.entity';
@@ -34,4 +35,10 @@ export class Product {
     cascade: true,
   })
   images: ProductImage[];
+
+  @Column({ default: 0 })
+  stock: number; // số lượng tồn kho hiện tại
+
+  @OneToMany(() => OrderItem, (item) => item.product)
+  orderItems: OrderItem[];
 }
