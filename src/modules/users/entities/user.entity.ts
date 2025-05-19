@@ -5,8 +5,10 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  OneToMany,
 } from 'typeorm';
 import { Role } from './role.entity';
+import { Order } from '@/modules/order/entities/order.entity';
 
 @Entity({
   name: 'users',
@@ -97,4 +99,7 @@ export class User extends BaseEntity {
     nullable: true,
   })
   blockAt: Date | undefined | null;
+
+  @OneToMany(() => Order, order => order.user)
+  orders: Order[];
 }
