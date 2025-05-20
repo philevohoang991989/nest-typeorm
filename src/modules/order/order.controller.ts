@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Request } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { OrderStatus } from './order-status.enum';
 import { OrderService } from './order.service';
 
 @Controller('order')
@@ -22,10 +23,7 @@ export class OrderController {
 
   @Patch(':id/status')
   @ApiOperation({ summary: 'Cập nhật trạng thái đơn hàng (completed hoặc cancelled)' })
-  async updateOrderStatus(
-    @Param('id', ParseIntPipe) orderId: number,
-    @Body('status') newStatus: 'completed' | 'cancelled',
-  ) {
+  async updateOrderStatus(@Param('id', ParseIntPipe) orderId: number, @Body('status') newStatus: OrderStatus) {
     return this.orderService.updateOrderStatus(orderId, newStatus);
   }
 
