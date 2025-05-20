@@ -14,6 +14,7 @@ import {
   Query,
   Request,
 } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdateUserDTO } from './dto/update-user.dto';
 import { UserFindQueryDto } from './dto/user-find-query.dto';
@@ -21,6 +22,7 @@ import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
 @Controller('users')
+@ApiBearerAuth()
 export class UsersController {
   constructor(private readonly usersService: UsersService) { }
 
@@ -39,10 +41,7 @@ export class UsersController {
     return await this.usersService.findById(id);
   }
   @Get()
-  async getAllUsers(
-    @Query(NormalizeFindQueryPipe) query: UserFindQueryDto,
-    @Request() req,
-  ): Promise<Pagination<User>> {
+  async getAllUsers(@Query(NormalizeFindQueryPipe) query: UserFindQueryDto, @Request() req): Promise<Pagination<User>> {
     try {
       return await this.usersService.paginate(query, req.user);
     } catch (e) {
@@ -51,10 +50,7 @@ export class UsersController {
   }
 
   @Patch(':id')
-  async update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdateUserDTO,
-  ): Promise<ResponseDTO> {
+  async update(@Param('id', ParseIntPipe) id: number, @Body() dto: UpdateUserDTO): Promise<ResponseDTO> {
     try {
       return await this.usersService.update(id, dto);
     } catch (e) {
