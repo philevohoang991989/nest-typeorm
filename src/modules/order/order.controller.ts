@@ -29,7 +29,7 @@ export class OrderController {
     return this.orderService.updateOrderStatus(orderId, newStatus);
   }
 
-  @Get('stats')
+  @Get('status')
   @ApiOperation({ summary: 'Thống kê tổng số đơn hàng và tổng doanh thu' })
   // @Roles('admin') // Chỉ admin được xem thống kê
   async getOrderStats() {
