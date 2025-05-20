@@ -39,6 +39,9 @@ export class Product {
   @Column({ default: 0 })
   stock: number; // số lượng tồn kho hiện tại
 
+  @Column({ default: 0 })
+  price: number; // số lượng tồn kho hiện tại
+
   @OneToMany(() => OrderItem, (item) => item.product)
   orderItems: OrderItem[];
 }

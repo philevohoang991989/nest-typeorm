@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { CreateAuthDto } from '@/auth/dto/create-auth.dto';
 import { ResetPasswordDTO } from '@/auth/dto/reset-password.dto';
 import { MailService } from '@/mail/mail.service';
@@ -61,11 +60,7 @@ export class UsersService {
     const user = await this.userRepository.save(newUser);
     const loginUrl = `${this.configService.get('APP_URL')}/active-account?token=${reset_token}`;
 
-    this.mailService.sendWelcomeEmail(
-      loginUrl,
-      user.email,
-      registerDto.password,
-    );
+    this.mailService.sendWelcomeEmail(loginUrl, user.email, registerDto.password);
 
     // Remove sensitive data
     delete (user as Partial<User>).password;
@@ -120,30 +115,21 @@ export class UsersService {
     };
   }
 
-  async paginate(
-    filter: UserFindQueryDto,
-    authUser: AuthPayload,
-  ): Promise<Pagination<User>> {
+  async paginate(filter: UserFindQueryDto, authUser: AuthPayload): Promise<Pagination<User>> {
     const qb = this.userRepository.createQueryBuilder('users');
     console.log({ qb });
 
     const search = filter?.search?.trim().toLowerCase();
     if (search) {
-      qb.andWhere(
-        `( LOWER(users.email) like :search OR LOWER(users.name) like :search  )`,
-        {
-          search: `%${search}%`,
-        },
-      );
+      qb.andWhere(`( LOWER(users.email) like :search OR LOWER(users.name) like :search  )`, {
+        search: `%${search}%`,
+      });
     }
 
     const sortData = getOrderByClause(filter?.sort?.trim() ?? '-users.id');
     const sortKey = Object.keys(sortData).pop();
     if (sortKey && ['users.email', 'users.name'].includes(sortKey)) {
-      qb.addOrderBy(
-        `LOWER(${sortKey})`,
-        Object.values(sortData).pop() == 'DESC' ? 'DESC' : 'ASC',
-      );
+      qb.addOrderBy(`LOWER(${sortKey})`, Object.values(sortData).pop() == 'DESC' ? 'DESC' : 'ASC');
     } else {
       qb.orderBy(sortData);
     }
@@ -246,9 +232,7 @@ export class UsersService {
   async resetPassword(resetPassword: ResetPasswordDTO): Promise<ResponseDTO> {
     const isExistedUser = await this.userRepository.findOne({
       where: {
-        email: resetPassword.username
-          ? resetPassword.username.toLocaleLowerCase()
-          : undefined,
+        email: resetPassword.username ? resetPassword.username.toLocaleLowerCase() : undefined,
       },
     });
     if (!isExistedUser) {

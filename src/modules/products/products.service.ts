@@ -46,6 +46,8 @@ export class ProductsService {
     const product = this.productRepo.create({
       name: dto.name,
       description: dto.description,
+      price: dto.price,
+      stock: dto.stock,
       category,
       productType,
     });

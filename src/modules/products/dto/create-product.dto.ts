@@ -1,13 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 // Dùng khi client muốn tạo attribute mới
 class AttributeDto {
@@ -84,4 +77,14 @@ export class CreateProductDto {
     description: 'Upload nhiều hình ảnh cho sản phẩm',
   })
   images?: string[]; // không cần validate vì được set sau từ file
+
+  @ApiProperty({ description: 'Giá sản phẩm', example: 1 })
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
+
+  @ApiProperty({ description: 'Số lượng sản phẩm', example: 1 })
+  @IsNotEmpty()
+  @IsNumber()
+  stock: number;
 }
