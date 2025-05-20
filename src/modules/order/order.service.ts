@@ -6,6 +6,7 @@ import { User } from '../users/entities/user.entity';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderItem } from './entities/order-item.entity';
 import { Order } from './entities/order.entity';
+import { OrderStatus } from './order-status.enum';
 
 @Injectable()
 export class OrderService {
@@ -23,7 +24,7 @@ export class OrderService {
     const order = this.orderRepository.create({
       user,
       note: createOrderDto.note,
-      status: 'pending',
+      status: OrderStatus.PENDING,
       items: [],
     });
     let total = 0;
@@ -62,7 +63,7 @@ export class OrderService {
     }));
   }
 
-  async updateOrderStatus(orderId: number, newStatus: 'completed' | 'cancelled'): Promise<Order> {
+  async updateOrderStatus(orderId: number, newStatus: OrderStatus): Promise<Order> {
     const order = await this.orderRepository.findOne({
       where: { id: orderId },
       relations: ['items', 'items.product'],
@@ -70,11 +71,11 @@ export class OrderService {
 
     if (!order) throw new NotFoundException('Đơn hàng không tồn tại');
 
-    if (order.status === 'cancelled') {
+    if (order.status === OrderStatus.CANCELLED) {
       throw new BadRequestException('Đơn hàng đã bị huỷ trước đó');
     }
 
-    if (newStatus === 'cancelled') {
+    if (newStatus === OrderStatus.CANCELLED) {
       // Rollback tồn kho
       for (const item of order.items) {
         item.product.stock += item.quantity;
@@ -88,11 +89,11 @@ export class OrderService {
 
   async getOrderStats() {
     const [totalOrders, rawRevenue] = (await Promise.all([
-      this.orderRepository.count({ where: { status: 'completed' } }),
+      this.orderRepository.count({ where: { status: OrderStatus.COMPLETED } }),
       this.orderRepository
         .createQueryBuilder('order')
         .select('SUM(order.totalAmount)', 'total')
-        .where('order.status = :status', { status: 'completed' })
+        .where('order.status = :status', { status: OrderStatus.COMPLETED })
         .getRawOne(),
     ])) as [number, { total: string | null }];
 

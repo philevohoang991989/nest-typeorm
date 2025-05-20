@@ -1,5 +1,6 @@
 import { User } from '@/modules/users/entities/user.entity';
 import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { OrderStatus } from '../order-status.enum';
 import { OrderItem } from './order-item.entity';
 
 @Entity({ name: 'order' })
@@ -19,8 +20,8 @@ export class Order {
   @Column({ nullable: true })
   note: string;
 
-  @Column({ default: 'pending' })
-  status: 'pending' | 'completed' | 'cancelled';
+  @Column({ default: OrderStatus.PENDING })
+  status: OrderStatus;
 
   @CreateDateColumn()
   createdAt: Date;
